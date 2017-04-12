@@ -1,3 +1,5 @@
+DBG = False
+
 def subsetSumTabAllPositives(arr, target):
 	ans = []
 	for idx in range(len(arr)):
@@ -59,9 +61,10 @@ def subsetSumTab(arr, target):
 				
 			ans[idx][shifted_sum] = possibleOnExcluding or possibleOnIncluding
 	
-
-	for v in ans:
-		print v
+	
+	if DBG:
+		for v in ans:
+			print v
 	return ans[len(ans)-1][target + shift]
 			
 	

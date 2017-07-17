@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <queue>
 using namespace std;
 typedef long long ll;
 class trainer{
@@ -20,9 +21,16 @@ bool dayComp(trainer const &a, trainer const &b){
 	return a.day < b.day;
 }
 
-bool sadnessComp(trainer const &a, trainer const &b){
+bool sadnessCompf(trainer const &a, trainer const &b){
 	return a.sadness < b.sadness;
 }
+
+class sadnessComp{
+public:
+	bool operator()(trainer a, trainer b){
+		return a.sadness < b.sadness;
+	}
+};
 
 int main(){
 	
@@ -38,30 +46,26 @@ int main(){
 		for(int i = 0; i<n; i++){
 			cin >> day >> lectures >> sadness;
 			trainers[i].set(day, lectures, sadness);
-			totalSadness += lectures*sadness;
+			ll lect = (ll) lectures;
+			totalSadness += lect*sadness;
 		}
 		sort(trainers, trainers+n, dayComp);
 
-		vector<trainer> vec;
-		int last_trainer_idx = 0;
-		bool added;
-		for(int day = 1; day <= d; day++){
-			added = false;
-			while(last_trainer_idx < n && trainers[last_trainer_idx].day == day){
-				vec.push_back(trainers[last_trainer_idx]);
-				last_trainer_idx += 1;
-				added = true;
+		priority_queue<trainer, vector<trainer>, sadnessComp> pq;
+		int last_index = 0;
+
+		for(int day=1; day <= d; day++){
+			while(last_index < n && trainers[last_index].day == day){
+				pq.push(trainers[last_index]);
+				last_index++;
 			}
-
-			if(added)
-				sort(vec.begin(), vec.end(), sadnessComp);
-
-			if(vec.size() > 0){
-				trainer last = vec.back();
-				totalSadness -= last.sadness;
-				last.lectures -= 1;
-				if(last.lectures == 0)
-					vec.pop_back();
+			if(pq.size() > 0){
+				trainer t = pq.top();
+				pq.pop();
+				totalSadness -= t.sadness;
+				t.lectures -= 1;
+				if(t.lectures != 0)
+					pq.push(t);
 			}
 		}
 

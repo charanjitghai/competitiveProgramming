@@ -1,0 +1,1 @@
+../../../LeetCode/Adobe/195_TenthLine.sh

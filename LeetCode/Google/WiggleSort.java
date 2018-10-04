@@ -1,3 +1,8 @@
+/**
+* author: charanjitghai
+* question: https://leetcode.com/problems/wiggle-sort/description/
+*/
+
 class Solution {
     private void swap(int[] nums, int i, int j) {
         int temp = nums[i];
